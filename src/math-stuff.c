@@ -90,9 +90,9 @@ static inline q8_8_t fdiv(q8_8_t a, q8_8_t b) {
 /* --- State --------------------------------------------------------------- */
 
 static q8_8_t dz = I2F(3);   // initial translate in z (1.0)
-static int16_t angle = 0;    // 0-255 full circle
+static uint8_t angle = 0;    // 0-255 full circle
 
-static const uint8_t ANGLE_STEP = 4u;
+static const uint8_t ANGLE_STEP = 16u;
 
 static const q8_8_t sin_lut[256] = {
     0, 3, 6, 9, 12, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46,

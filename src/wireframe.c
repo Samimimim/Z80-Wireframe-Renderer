@@ -97,7 +97,7 @@ void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
     err = dx - dy;
 
     while (1) {
-        draw_dot(x1, y1, 5, size);
+        draw_dot(x1, y1, 3, size); //Change color here
 
         if (y1 == y2 && x1 == x2)
             break;
