@@ -17,7 +17,6 @@ Allows you to display "any" 3D objekt on screen, you just have to figure out how
 - Customizable Draw thickness
 
 
-It's still a bit bugy, since i use a lut for cos / sin whith limits the possible angle to 255
 
 
 
@@ -28,6 +27,17 @@ You'll have to understand the whole Zeal-8-Bit Projekt, but i assume u do:
  export ZGDK_PATH=/your/path/to/zeal-game-development-kit
  make
 ```
+## Developent
+
+It's my first big C projekt, so i'm having a hard time but none or less i have found some cool optimations such as:
+
+- Using a lut(look up table) for cos and sin
+- Using a DRM to clear the screen
+- Using a smart 3D Modell
+
+My biggest Problems so far where:
+- Wrong LUT
+- Lack of clamp_proj
 
 ## Final
 Feel free to to do whatever you wan't with the code or give tipps for improvment.

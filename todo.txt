@@ -1,0 +1,22 @@
+
+//TODO: Video Modus Initialisieren                               [x]
+//TODO: Map_VRAM Funktion                                        [x]
+//TODO: clear_screen funktion                                    [x]
+//TODO: Test ob alles soweit klappt                              [x]
+//TODO: Draw_Dot Funktion                                        [x]
+//TODO: Draw_Line Funktion                                       [x]
+//TODO: Funktionen aus                                           [x]
+//https://www.youtube.com/watch?v=qjWkNZ0SXfo Impliementieren
+//TODO: Debugging                                                [x]
+//TODO: Frezze Screen while clearing                             [ ]!!Maybe use a framebuffer, since the DRM would technicly be fast enough??
+//TODO: Clear Sreen using DRM                                    [x]
+//TODO: cos/sin using lookup                                     [x]
+//TODO: write screen_write/map_vram in asm                       [ ]
+//BUGFIX: Cube stops spinning after fith iteration               [x]
+//TODO: pyramid as default modell                               [x]
+//TODO: Check lut for Errors                                     [x]
+//TODO: Rewrite pyramid to have two less duplictae edges         [x]
+
+//                                        v-------^
+//TODO: Rewrite rendering pipline from: Render -> Draw -> Clear   to:   Draw(previus) -> Render -> Clear ------------> Draw
+//                                        ^------------------v                  v------(hold)------^---if(framebuffer)--^

@@ -1,5 +1,5 @@
 /*
- * wireframe.c - Draws and rotates a 3D cube
+ * wireframe.c - Draws and rotates a 3D pyramid 
  *
  *  Compile with ""make""  
  *
@@ -12,32 +12,6 @@
  *
  */
 
-//TODO: Video Modus Initialisieren                               [x]
-//TODO: Map_VRAM Funktion                                        [x]
-//TODO: clear_screen funktion                                    [x]
-//TODO: Test ob alles soweit klappt                              [x]
-//TODO: Draw_Dot Funktion                                        [x]
-//TODO: Draw_Line Funktion                                       [x]
-//TODO: Funktionen aus                                           [x]
-//https://www.youtube.com/watch?v=qjWkNZ0SXfo Impliementieren
-//TODO: Debugging                                                [x]
-//TODO: Frezze Screen while clearing                             [ ](Imposible)
-//TODO: Clear Sreen using DRM                                    [x]
-//TODO: cos/sin using lookup                                     [x]
-//TODO: write screen_write/map_vram in asm                       [ ]
-//BUGFIX: Cube stops spinning after fith iteration               [x]
-//TODO: Pentagon as deafault modell
-//FETRTIG!!!!                                                    [ ]
-
-
-/*
- * +-------------------Current Problem------------------------+
- * |                                                          |
- * |      Cube spins half a turn, changes direction,          |
- * |        become an frankenstein and return to default stat.|
- * |                                                          |
- * +----------------------------------------------------------+
-*/
 
 #include <stdint.h>
 #include "math-stuff.h"
@@ -61,6 +35,10 @@ static inline void map_vram(uint8_t page) //Page is relative to tileset memory
     current_page2 = page;
     //((VID_MEM_PHYS_ADDR_START + 64 * 1024) >> 14); //This gives a Warning so i hardcode it to 68
     mmu_page2 = 68 + page;
+}
+
+void display_state(uint8_t state) {
+    vid_stat = state;
 }
 
 void screen_write(uint8_t x, uint8_t y, uint8_t color)
