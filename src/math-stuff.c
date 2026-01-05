@@ -22,8 +22,8 @@
 #include "math-stuff.h"
 /* --- Config / types ----------------------------------------------------- */
 //Screen
-#define SCREEN_WIDTH 256 -1
-#define SCREEN_HEIGHT 240 -1
+#define SCREEN_WIDTH (256 -1)
+#define SCREEN_HEIGHT (240 -1)
 void clear_screen(void);
 void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
 
@@ -52,43 +52,28 @@ typedef struct {
 
 /*-----------Cube Modell Data----------------------------------------*/
 const Vec3 vs[] = {
-    // Lower layer
-    { I2F(-1), I2F(-1), I2F(-1) }, /* 0 Hinten Links*/ 
-    { I2F( 1), I2F(-1), I2F(-1) }, /* 1 Hinten Rechts*/
-    { I2F( 1), I2F( 1), I2F(-1) }, /* 2 Vorne Rechts*/
-    { I2F(-1), I2F( 1), I2F(-1) }, /* 3 Vorne Links*/
-    // upper layer
-    { I2F(-1), I2F(-1), I2F( 1) }, /* 4 Hinten Links*/
-    { I2F( 1), I2F(-1), I2F( 1) }, /* 5 Hinten Rechts*/
-    { I2F( 1), I2F( 1), I2F( 1) }, /* 6 Vorne Rechts*/
-    { I2F(-1), I2F( 1), I2F( 1) }  /* 7 Vorne Links*/
+    //Spitze
+    { 0,       256, 0 }, // 0
+
+    // Boden (z = +1 -> 256)
+    { -255,       -256,  -256 }, // Hinten Links
+    { 255,     -256,   -256 }, // Hinten Rechts
+    { -255,     -256,   256 }, // Vorne Links
+    { 255,    -256,   256 } // Vorne Rechts
 };
+const uint16_t vs_count = sizeof(vs)/sizeof(vs[0]);
 
-const uint16_t vs_count = (uint16_t)(sizeof(vs) / sizeof(vs[0]));
+const uint8_t face0[] = {1,2,0}; // Hinten
+const uint8_t face1[] = {3,4,0}; // Vorne
+const uint8_t face2[] = {2,4,0}; // Rechts
+const uint8_t face3[] = {1,3,0}; // Links
 
-// Faces
-const uint8_t face0[] = { 0, 1, 2, 3 }; /* bottom */
-const uint8_t face1[] = { 4, 5, 6, 7 }; /* top */
-const uint8_t face2[] = { 0, 1, 5, 4 }; /* front */
-const uint8_t face3[] = { 2, 3, 7, 6 }; /* back */
-const uint8_t face4[] = { 1, 2, 6, 5 }; /* right */
-const uint8_t face5[] = { 0, 3, 7, 4 }; /* left */
-
-// Pointer array to faces
 const uint8_t * const fs[] = {
-    face0,
-    face1,
-    face2,
-    face3,
-    face4,
-    face5
+    face0, face1, face2, face3
 };
 
-// SDCC-friendly explicit lengths (all faces are quads here)
-const uint8_t fs_len[] = { 4, 4, 4, 4, 4, 4 };
-
-//face count
-const uint16_t fs_count = 6;
+const uint8_t fs_len[] = {3,3,3,3};
+const uint16_t fs_count = 7;
 
 /* --- Fixed-point helpers ------------------------------------------------ */
 
@@ -104,52 +89,64 @@ static inline q8_8_t fdiv(q8_8_t a, q8_8_t b) {
 
 /* --- State --------------------------------------------------------------- */
 
-static q8_8_t dz = I2F(1)*3;   // initial translate in z (1.0)
-static uint8_t angle = 0;    // 0-255 full circle
+static q8_8_t dz = I2F(3);   // initial translate in z (1.0)
+static int16_t angle = 0;    // 0-255 full circle
 
-static const uint8_t ANGLE_STEP = 2u;
+static const uint8_t ANGLE_STEP = 4u;
 
-static const int8_t cordic_atan[] = { 32, 19, 10, 5, 3, 1, 1, 0 };
+static const q8_8_t sin_lut[256] = {
+    0, 3, 6, 9, 12, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46,
+    49, 52, 55, 58, 61, 64, 67, 70, 73, 76, 78, 81, 84, 87, 90, 93,
+    95, 98,101,104,106,109,111,114,116,119,121,124,126,128,131,133,
+    135,138,140,142,144,147,149,151,153,155,157,159,161,163,165,167,
+    169,171,173,175,177,178,180,182,184,185,187,189,190,192,194,195,
+    197,198,200,201,203,204,206,207,208,210,211,212,214,215,216,218,
+    219,220,221,223,224,225,226,227,228,229,231,232,233,234,234,235,
+    236,237,238,239,240,241,241,242,243,243,244,245,245,246,246,247,
+    247,248,248,249,249,250,250,250,251,251,251,252,252,252,252,253,
+    253,253,253,254,254,254,254,254,254,255,255,255,255,255,255,255,
+    255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+    255,254,254,254,254,254,254,253,253,253,253,252,252,252,252,251,
+    251,251,250,250,250,249,249,248,248,247,247,246,246,245,245,244,
+    243,243,242,241,241,240,239,238,237,236,235,234,234,233,232,231,
+    229,228,227,226,225,224,223,221,220,219,218,216,215,214,212,211,
+    210,208,207,206,204,203,201,200,198,197,195,194,192,190,189,187,
+    185,184,182,181,178,177,175,173,171,169,167,165,163,161,159,157,
+    155,153,151,149,147,144,142,140,138,135,133,131,128,126,124,121,
+    119,116,114,111,109,106,104,101, 98, 95, 93, 90, 87, 84, 81, 78,
+     76, 73, 70, 67, 64, 61, 58, 55, 52, 49, 46, 43, 40, 37, 34, 31,
+     28, 25, 22, 19, 16, 12,  9,  6,  3,  0
+};
 
-/* CORDIC gain K ~ 0.607252935 => in Q8.8 */
-#define CORDIC_K 155 /* (int)(0.607252935 * 256) ~= 155 */
+static const q8_8_t cos_lut[256] = {
+    256, 256, 256, 255, 255, 255, 254, 254, 254, 254, 254, 254, 253, 253, 253, 253,
+    252, 252, 252, 252, 251, 251, 251, 250, 250, 250, 249, 249, 248, 248, 247, 247,
+    246, 246, 245, 245, 244, 243, 243, 242, 241, 241, 240, 239, 238, 237, 236, 235,
+    234, 234, 233, 232, 231, 229, 228, 227, 226, 225, 224, 223, 221, 220, 219, 218,
+    216, 215, 214, 212, 211, 210, 208, 207, 206, 204, 203, 201, 200, 198, 197, 195,
+    194, 192, 190, 189, 187, 185, 184, 182, 181, 178, 177, 175, 173, 171, 169, 167,
+    165, 163, 161, 159, 157, 155, 153, 151, 149, 147, 144, 142, 140, 138, 135, 133,
+    131, 128, 126, 124, 121, 119, 116, 114, 111, 109, 106, 104, 101,  98,  95,  93,
+     90,  87,  84,  81,  78,  76,  73,  70,  67,  64,  61,  58,  55,  52,  49,  46,
+     43,  40,  37,  34,  31,  28,  25,  22,  19,  16,  12,   9,   6,   3,   0,   0,
+     0,   3,   6,   9,  12,  16,  19,  22,  25,  28,  31,  34,  37,  40,  43,  46,
+     49,  52,  55,  58,  61,  64,  67,  70,  73,  76,  78,  81,  84,  87,  90,  93,
+     95,  98, 101, 104, 106, 109, 111, 114, 116, 119, 121, 124, 126, 128, 131, 133,
+    135, 138, 140, 142, 144, 147, 149, 151, 153, 155, 157, 159, 161, 163, 165, 167,
+    169, 171, 173, 175, 177, 178, 180, 182, 184, 185, 187, 189, 190, 192, 194, 195,
+    197, 198, 200, 201, 203, 204, 206, 207, 208, 210, 211, 212, 214, 215, 216, 218
+};
 
-static void cordic_rot(uint8_t a, q8_8_t *out_cos, q8_8_t *out_sin) {
-    /* Map angle 0..255 to signed range -128..127 to represent -pi..pi */
-    int16_t z = (int16_t)a;
-    if (z > 127) z -= 256;
-
-    /* working vars in Q8.8 */
-    q32_t x = CORDIC_K; /* Q8.8 */
-    q32_t y = 0;
-    int i;
-    for (i = 0; i < (int)(sizeof(cordic_atan)/sizeof(cordic_atan[0])); ++i) {
-        int16_t shift = i;
-        int16_t zstep = cordic_atan[i];
-        if (z >= 0) {
-            /* rotate by +atan(2^-i) */
-            q32_t x_new = x - (y >> shift);
-            q32_t y_new = y + (x >> shift);
-            x = x_new; y = y_new;
-            z -= zstep;
-        } else {
-            q32_t x_new = x + (y >> shift);
-            q32_t y_new = y - (x >> shift);
-            x = x_new; y = y_new;
-            z += zstep;
-        }
-    }
-    /* results are in Q8.8 */
-    *out_cos = (q8_8_t)x;
-    *out_sin = (q8_8_t)y;
+static void lut_rot(uint8_t a, q8_8_t *out_cos, q8_8_t *out_sin) {
+    *out_cos = cos_lut[a]; // Q8.8
+    *out_sin = sin_lut[a]; // Q8.8
 }
-
 /*-----------Operations------------------------------*/
 
 // rotate_xz_out: rotate vector in XZ plane by angle a (0-255)
 static void rotate_xz_out(const Vec3 *v, uint8_t a, Vec3 *out) {
     q8_8_t c, s;
-    cordic_rot(a, &c, &s);
+    lut_rot(a, &c, &s);
     // x*c - z*s ; x*s + z*c
     q32_t tx = (q32_t)fmul(v->x, c) - (q32_t)fmul(v->z, s);
     q32_t tz = (q32_t)fmul(v->x, s) + (q32_t)fmul(v->z, c);
@@ -166,7 +163,7 @@ static void translate_z_out(const Vec3 *v, q8_8_t addz, Vec3 *out) {
 
 // project_out: simple perspective divide (produces Q8.8 x/y, passes z through)
 static void project_out(const Vec3 *v, Vec3 *out) {
-    const q8_8_t Z_MIN = 2;
+    const q8_8_t Z_MIN = I2F(2);
     q8_8_t z = v->z;
     if (z < Z_MIN) z = Z_MIN;
 

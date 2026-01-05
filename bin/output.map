@@ -1,0 +1,241 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  .__.ABS.                           
+     00000000  l__BSEG                         
+     00000000  l__CABS                         
+     00000000  l__CODE                         
+     00000000  l__DABS                         
+     00000000  l__HEAP                         
+     00000000  s__CABS                         
+     00000000  s__CODE                         
+     00000000  s__DABS                         
+     00000001  l__DATA                         
+     00000001  l__GSFINAL                      
+     00000010  l__INITIALIZED                  
+     00000010  l__INITIALIZER                  
+     00000020  l__HEADER                       
+     00000030  l__GSINIT                       
+     000000A3  l__BSS                          
+     00000173  l__SYSTEM                       
+     000001F5  l__HOME                         
+     00000FB1  l__TEXT                         
+     00004000  s__HEADER                       
+     00004020  s__GSINIT                       
+     00004050  s__GSFINAL                      
+     00004051  s__INITIALIZER                  
+     00004061  s__HOME                         
+     00004256  s__SYSTEM                       
+     000043C9  s__TEXT                         
+     0000537A  s__INITIALIZED                  
+     0000538A  s__BSEG                         
+     0000538A  s__BSS                          
+     0000542D  s__DATA                         
+     0000542E  s__HEAP                         
+     00008000  _SCREEN                            wireframe
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_HEADER                             00004000    00000020 =          32. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_GSINIT                             00004020    00000030 =          48. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_GSFINAL                            00004050    00000001 =           1. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_INITIALIZER                        00004051    00000010 =          16. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_HOME                               00004061    000001F5 =         501. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00004061  __divslong                         _divslong
+     000040F1  __divulong                         _divulong
+     0000416B  __mullong                          _mullong
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_SYSTEM                             00004256    00000173 =         371. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00004256  _read                              crt0
+     00004267  _write                             crt0
+     00004278  _open                              crt0
+     00004281  _close                             crt0
+     00004286  _dstat                             crt0
+     0000428B  _stat                              crt0
+     00004291  _seek                              crt0
+     000042AF  _ioctl                             crt0
+     000042B8  _mkdir                             crt0
+     000042BD  _chdir                             crt0
+     000042C2  _curdir                            crt0
+     000042C7  _opendir                           crt0
+     000042CC  _readdir                           crt0
+     000042D1  _rm                                crt0
+     000042D6  _mount                             crt0
+     000042E1  _exit                              crt0
+     000042E6  _exec                              crt0
+     0000430A  _dup                               crt0
+     00004310  _msleep                            crt0
+     00004315  _settime                           crt0
+     0000431E  _gettime                           crt0
+     0000432C  _setdate                           crt0
+     00004331  _getdate                           crt0
+     00004336  _map                               crt0
+     0000433F  _swap                              crt0
+     00004345  _palloc                            crt0
+     0000434C  _pfree                             crt0
+     00004351  _pmap                              crt0
+     00004360  _getchar                           crt0
+     0000438C  _putchar                           crt0
+     000043BD  _fflush_stdout                     crt0
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_TEXT                               000043C9    00000FB1 =        4017. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     000043CF  _vs                                math_stuff
+     000043ED  _vs_count                          math_stuff
+     000043EF  _face0                             math_stuff
+     000043F2  _face1                             math_stuff
+     000043F5  _face2                             math_stuff
+     000043F8  _face3                             math_stuff
+     000043FB  _fs                                math_stuff
+     00004403  _fs_len                            math_stuff
+     00004407  _fs_count                          math_stuff
+     00004D53  _frame                             math_stuff
+     0000501F  _screen_write                      wireframe
+     0000505A  _draw_dot                          wireframe
+     000050C1  _draw_line                         wireframe
+     00005247  _clear_screen                      wireframe
+     0000525E  _main                              wireframe
+     00005276  _zvb_dma_virt_to_phys              zvb_dma
+     0000528C  _zvb_dma_start_transfer            zvb_dma
+     000052A2  __modschar                         
+     000052AA  __modsint                          
+     000052B0  ___mulsint2slong                   u_16_16_mul
+     000052DE  ___muluint2ulong                   u_16_16_mul
+     000052F5  __divschar                         
+     000052F7  __div8                             
+     000052FB  __div_signexte                     
+     000052FF  __div16                            
+     000052FF  __divsint                          
+     00005325  __get_remainder                    
+     0000532F  __mulint                           
+     00005331  __mul16                            
+     00005346  __divuchar                         
+     00005348  __divu8                            
+     0000534B  __divu16                           
+     0000534B  __divuint                          
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_INITIALIZED                        0000537A    00000010 =          16. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000537E  _dma_descriptor                    wireframe
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_BSS                                0000538A    000000A3 =         163. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_DATA                               0000542D    00000001 =           1. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000542D  _current_page2                     wireframe
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 12.
+
+Files Linked                              [ module(s) ]
+
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/bin/zos_crt0.rel
+                                          [ crt0 ]
+bin/math-stuff.rel                        [ math_stuff ]
+bin/wireframe.rel                         [ wireframe ]
+bin/zvb_dma.rel                           [ zvb_dma ]
+
+
+Libraries Linked                          [ object file ]
+
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ _divslong.rel ]
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ _divulong.rel ]
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ _mullong.rel ]
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ modsigned.rel ]
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ __mulsint2slong.rel ]
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ divsigned.rel ]
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ mul.rel ]
+/home/smeagol/dev/Zeal/Zeal-8-bit-OS//kernel_headers/sdcc/lib/z80.lib
+                                          [ divunsigned.rel ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 13.
+
+User Base Address Definitions
+
+_HEADER=0x4000
+
+
