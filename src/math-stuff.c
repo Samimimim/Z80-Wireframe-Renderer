@@ -1,15 +1,15 @@
 /*
  *  math-stuff.c - Math logic behind everything
  *
- *  Compile with ""make""  
- * 
+ *  Compile with ""cmake""
+ *
  *
  *  Translation from Alexey Kutepov's render logic: Samael with the help of GPT-5
  *  frame() and debuging: Samael
- * 
- * 
+ *
+ *
  *  Original JS file: https://github.com/tsoding/formula/blob/main/index.js
- * 
+ *
  *  License: i don't know and care
  *
  *  Tsoding's Youtube Video: https://youtu.be/qjWkNZ0SXfo
@@ -18,7 +18,6 @@
 
 
 #include <stdint.h>
-#include "zos_time.h"
 #include "math-stuff.h"
 /* --- Config / types ----------------------------------------------------- */
 //Screen
@@ -26,11 +25,7 @@
 #define SCREEN_HEIGHT 240
 
 void clear_screen(void);
-void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2);
-
-//Math
-typedef int16_t q8_8_t;    // 16-bit fixed point value
-typedef int32_t q32_t;      // intermediate
+void draw_line(line_t* line);
 
 #define FP_SHIFT 8
 #define FP_ONE   (1 << FP_SHIFT)   //256
@@ -40,22 +35,12 @@ typedef int32_t q32_t;      // intermediate
 // Convert fixed to integer (floor)
 #define F2I(f) ((int16_t)((f) >> FP_SHIFT))
 
-// 3D vertex in fixed Q8.8
-typedef struct {
-    q8_8_t x, y, z;
-} Vec3;
-
-// 2D point in integer screen coords
-typedef struct {
-    int16_t x, y;
-} Point2i;
-
 
 /*-----------Cube Modell Data----------------------------------------*/
 const Vec3 vs[] = {
     //top
     { 0,    256,  0  }, // 0
-    // bottom 
+    // bottom
     {-255, -256, -256},// rear left
     { 255, -256, -256},// rear right
     {-255, -256,  256},// front left
@@ -138,7 +123,7 @@ static void lut_rot(uint8_t a, q8_8_t *out_cos, q8_8_t *out_sin) {
 /*-----------Operations------------------------------*/
 
 // rotate_xz_out: rotate vector in XZ plane by angle a (0-255)
-static void rotate_xz_out(const Vec3 *v, uint8_t a, Vec3 *out) {
+static void rotate_xz_out(uint8_t a, const Vec3 *v, Vec3 *out) {
     q8_8_t c, s;
     lut_rot(a, &c, &s);
     // x*c - z*s ; x*s + z*c
@@ -188,18 +173,19 @@ static inline void clamp_proj(Vec3 *p) {
 }
 
 
+line_t line = { .sa = { 0 }, .sb = { 0 } };
 
 void frame(void) {
     // increment angle
     angle = (uint8_t)(angle + ANGLE_STEP);
-    
+
     //First: Calculate the Position of each vertex
     for (uint16_t i = 0; i < vs_count; i++) {
-        Vec3 va; 
+        Vec3 va;
         va = vs[i]; //The Vertexes 3D data
         Vec3 ra, pa;
         Point2i sa;
-        rotate_xz_out(&va, angle, &ra); //Rotate
+        rotate_xz_out(angle, &va, &ra); //Rotate
         translate_z_out(&ra, dz, &ra);  //offset from screen
         project_out(&ra, &pa);          //3D to 2D
         clamp_proj(&pa);                //Resize, to fit the screen
@@ -207,7 +193,7 @@ void frame(void) {
         vs_buffer[i] = sa; //The Vertexes 2D data
     }
     clear_screen();
-    // For each face, draw its edges 
+    // For each face, draw its edges
     for (uint16_t fi = 0; fi < fs_count; ++fi) {
         const uint8_t *face = fs[fi];
         uint8_t len = fs_len[fi];
@@ -216,11 +202,10 @@ void frame(void) {
             uint8_t idx_a = face[i];
             uint8_t idx_b = face[(i + 1) % len];
             //if (idx_a >= vs_count || idx_b >= vs_count) continue; //Saves 6.7 ms
-            Point2i sa, sb;
-            sa = vs_buffer[idx_a]; //Fetch the precalculated vertecies
-            sb = vs_buffer[idx_b];
-            draw_line(sa.x, sa.y, sb.x, sb.y);
+            // Point2i sa, sb;
+            line.sa = vs_buffer[idx_a]; //Fetch the precalculated vertecies
+            line.sb = vs_buffer[idx_b];
+            draw_line(&line);
         }
     }
-    msleep(250); //Let some time pass
 }
