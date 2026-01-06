@@ -1,0 +1,11 @@
+//Was never used so i removed to save some bytes
+void draw_dot(int x, int y, uint8_t color, int size)
+{
+    int dx, dy;
+
+    for (dy = 0; dy < size; dy++) {
+        for (dx = 0; dx < size; dx++) {
+            screen_write(x + dx, y + dy, color);
+        }
+    }
+}

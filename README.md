@@ -1,8 +1,5 @@
 # Wireframe Renderer for the Z80
 
-
-
-
 Allows you to display "any" 3D objekt on screen, you just have to figure out how to generate the verticies and faces.
 
 
@@ -14,7 +11,9 @@ Allows you to display "any" 3D objekt on screen, you just have to figure out how
 
 - Customizable Color
 
-- Customizable Draw thickness
+- Some preconfigured shapes like a cube, or a pyramid
+
+- And of course you can upload you own shaped
 
 
 
@@ -34,6 +33,7 @@ It's my first big C projekt, so i'm having a hard time but none or less i have f
 - Using a lut(look up table) for cos and sin
 - Using a DRM to clear the screen
 - Using a smart 3D Modell
+- Implementing a vertex buffer in my rendering pipline
 
 My biggest Problems so far where:
 - Wrong LUT
