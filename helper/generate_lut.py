@@ -17,8 +17,8 @@ for i in range(SIZE):
 
 def print_c_array(name, data):
     print(f"static const q8_8_t {name}[256] = {{")
-    for i in range(0, 256, 8):
-        line = ", ".join(f"{v:4d}" for v in data[i:i+8])
+    for i in range(0, 256, 16):
+        line = ",".join(f"{v:4d}" for v in data[i:i+16])
         print("    " + line + ",")
     print("};\n")
 

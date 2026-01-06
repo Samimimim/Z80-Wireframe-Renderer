@@ -12,7 +12,6 @@
  *
  */
 
-
 #include <stdint.h>
 #include "math-stuff.h"
 #include "sdcc.h"
@@ -20,12 +19,9 @@
 
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 240
-#define display_OF 0 
-#define display_ON 1<<7
 uint8_t current_page2;
 __sfr __at(0xF2) mmu_page2;
 __sfr __banked __at(0x9C) vid_mode;
-__sfr __banked __at(0x9D) vid_stat;
 uint8_t __at(0x8000) SCREEN[SCREEN_HEIGHT][SCREEN_WIDTH];
 static int abs(int v) { return v < 0 ? -v : v; } //How said  i don't have abs?
 
@@ -37,35 +33,16 @@ static inline void map_vram(uint8_t page) //Page is relative to tileset memory
     mmu_page2 = 68 + page;
 }
 
-void display_state(uint8_t state) {
-    vid_stat = state;
-}
-
-void screen_write(uint8_t x, uint8_t y, uint8_t color)
+void screen_write(int x, int y, uint8_t color)
 {
     uint8_t page = y >> 6;                 // Bitshift is cheaper than *255
     uint16_t offset = ((y & 0x3F) << 8) | x;
-
-    if (page != current_page2)
-        map_vram(page);
-
+    map_vram(page);
     ((uint8_t*)0x8000)[offset] = color;
-}
-
-void draw_dot(int x, int y, uint8_t color, int size)
-{
-    int dx, dy;
-
-    for (dy = 0; dy < size; dy++) {
-        for (dx = 0; dx < size; dx++) {
-            screen_write(x + dx, y + dy, color);
-        }
-    }
 }
 
 void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
 {
-    uint8_t size = 1;
     int dx, dy, sx, sy, err, e2;
 
     dx = abs(y2 - y1);
@@ -75,13 +52,10 @@ void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
     err = dx - dy;
 
     while (1) {
-        draw_dot(x1, y1, 3, size); //Change color here
-
+        screen_write(x1, y1, 10); //Change color here
         if (y1 == y2 && x1 == x2)
             break;
-
         e2 = err << 1;
-
         if (e2 > -dy) {
             err -= dy;
             y1 += sx;
@@ -92,6 +66,7 @@ void draw_line(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
         }
     }
 }
+
 zvb_dma_descriptor_t dma_descriptor = {
     .rd_addr_lo = 0,
     .rd_addr_hi = 17,
@@ -100,7 +75,6 @@ zvb_dma_descriptor_t dma_descriptor = {
     .length = 61440,
     .flags.raw = 0b00000001
 };
-
 
 void clear_screen()
 {
@@ -113,7 +87,6 @@ void clear_screen()
 int main()
 {
     vid_mode = 2;
-    map_vram(0);
     for (;;) {frame();} //Mainloop
     return 0;
 }
